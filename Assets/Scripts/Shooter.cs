@@ -6,6 +6,7 @@ public class Shooter : MonoBehaviour
 {
     public GameObject[] candyPrefabs;
     public Transform candyParentTransform;
+    public CandyManager candyManager;
     public float shotForce;
     public float shotTorque;
     public float baseWidth;
@@ -29,6 +30,10 @@ public class Shooter : MonoBehaviour
     }
     public void Shot()
     {
+    
+      
+        //キャンディを生成できる条件がいならばshotしない。
+        if (candyManager.GetCandyAmount() <= 0) return;
         GameObject candy = Instantiate(
             SampleCandy(),
             GetInstantiatePosition(),
@@ -39,6 +44,9 @@ public class Shooter : MonoBehaviour
         Rigidbody candyRigidBody = candy.GetComponent<Rigidbody>();
         candyRigidBody.AddForce(transform.forward * shotForce);
         candyRigidBody.AddTorque(new Vector3(0, shotTorque, 0));
+
+        //candy のストックを消費
+        candyManager.ConsumeCandy();
 
     }
 }
